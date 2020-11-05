@@ -1,0 +1,498 @@
+%-----------------------------------------------------------------------------
+% Schriftgröße, Layout, Papierformat, Art des Dokumentes
+%-----------------------------------------------------------------------------
+\documentclass[	12pt,				% Grundschriftgöße
+				oneside,				% einseitiges Dokument
+				a4paper,				% Papiergröße
+				halfparskip,			% Einzug bei einem Absatz
+				liststotoc,			% Verzeichniss (Abbildungen erc.) in das Inhaltverzeichnis
+				bibtotoc,			% Literaturverzeichnis ins Inhaltverzeichnis
+				fleqn,				% Mathematische Formeln linksbündig darstellen
+				%pointlessnumbers	% Punkt am Ende der Nummerierung des Inhaltsverzeichnisses entfernen
+			  ]	
+			  {scrreprt}
+
+%-----------------------------------------------------------------------------
+% Konstanten festlegen
+%-----------------------------------------------------------------------------
+\newcommand{\Verfasser}{'Vorname Nachname'}
+\newcommand{\Geburtstag}{'Geburtsdatum'}
+\newcommand{\Geburtsort}{'Geburtsort'}
+\newcommand{\Thesis}{Bachelor-Thesis}
+\newcommand{\Titel}{'Thesis Titel'}
+\newcommand{\Betreuer}{'Name des betreuenden Professors'}
+\newcommand{\ZweitBetreuer}{'Name des Zweitbetreuers'}
+\newcommand{\blankpage}{
+	\newpage
+	\thispagestyle{empty}
+	\mbox{}
+	\newpage
+}
+
+%-----------------------------------------------------------------------------
+% verwendete Pakete
+%-----------------------------------------------------------------------------
+\usepackage[latin1]{inputenc}			% Zeichenkodierung , Umlaute erlauben
+\usepackage[T1]{fontenc}					% Wahl des Fonts, bzw. der Kodierung
+\usepackage[english,ngerman]{babel}		% neue deutsche Rechtschreibung verwenden
+\usepackage{graphicx, float}				% ermöglicht das Einbinden von Grafiken, sehr wichtig!!!!!!!!!!
+\usepackage{fancyhdr}					% für formatierte Kopf- und Fußzeilen
+\usepackage{setspace}					% Package zum Kontrollieren von Leerräumen
+\usepackage{subfigure}					% erweiterte Darstellung von Bildern
+\usepackage{listings}					% Möglickeit zum Anzeigen von Quelltexten
+\usepackage[chapter]{minted}
+\usepackage{xcolor}						% Farben
+\usepackage{lmodern}						% bietet neuere Schriften, sieht besser aus im Acrobat Reader
+\usepackage{amsmath,amssymb}				% erweiteter Formelsatz und zusätzliche Mathe-Symbole
+\usepackage{booktabs}					% professionelle, typographisch richtige Tabellen
+\usepackage[binary-units=true]{siunitx}	% Darstellung von Si-Einheiten
+%\usepackage{pdfpages}					% pdf-Seiten einbinden
+\usepackage{enumitem}					% custom itemiziation
+\usepackage{acro}						% Acronyme
+
+\usepackage[backend=biber,style=authoryear,sorting=none]{biblatex}
+\addbibresource{literatur.bib}
+
+\usepackage[
+ 	% für an figure/table angeglichene Captions bei Codebeispielen
+ 	format=plain,
+ 	font={normalsize},bf,
+ 	indention=1cm,
+ 	labelformat=simple,
+	labelsep=period,
+ 	textformat=simple, 
+ 	justification=centering
+]{caption}	
+
+%-----------------------------------------------------------------------------
+% Fußnotennummerierung nicht für jedes kapitel zurücksetzen
+%-----------------------------------------------------------------------------
+\usepackage{chngcntr}
+\counterwithout{footnote}{chapter}
+
+%-----------------------------------------------------------------------------
+% Einstellungen der Seitenränder
+%-----------------------------------------------------------------------------
+\usepackage[left=3cm,						% linker Rand
+						right=3cm,			% rechter Rand
+						top=1.5cm,			% oberer Rand
+						bottom=1.5cm,		% unterer Rand
+						includeheadfoot,		% bezieht die Kopf- und Fußzeile mit ein
+						bindingoffset=0cm]	% Bundsteg
+						{geometry}
+
+%-----------------------------------------------------------------------------
+% Daten für die Titel des Artikels
+%-----------------------------------------------------------------------------
+\title{\Thesis}
+\author{\Verfasser}
+\date{\today{}}
+
+%-----------------------------------------------------------------------------
+% Metadaten in pdf einfügen
+%-----------------------------------------------------------------------------
+\usepackage[pdftex,
+						pdfauthor={\Verfasser},									% Name des Autors
+						pdftitle={\Titel},										% Name der Arbeit
+						pdfcreator={MiKTeX, LaTeX with hyperref and KOMA-Script},	% Von was erzeugt
+						pdfsubject={\Thesis},									% Was für eine Arbeit ist es
+						pdfkeywords={\Titel},
+						plainpages=false,
+						hypertexnames=false,
+						pdfpagelabels]{hyperref}
+
+%-----------------------------------------------------------------------------
+% Schriftarten anpassen
+%-----------------------------------------------------------------------------
+\setkomafont{sectioning}{\rmfamily\bfseries}				% Titelzeilen
+\setkomafont{caption}{\small}							% Schrift für Caption
+\setkomafont{captionlabel}{\sffamily\bfseries\small}		% Schrift für 'Abbildung'
+\setkomafont{chapterentry}{\small\bfseries}				% Schrift für Inhaltsverzeichnis
+\setkomafont{chapter}{\Large\bfseries}					% Schrift für Kapitel
+\setkomafont{section}{\large}							% Schrift für Section
+\setkomafont{subsection}{\normalsize}					% Schrift für Subsection
+
+%-----------------------------------------------------------------------------
+% "Quellcode"-Unterschrift von Listing in Quellcode umbennen
+%-----------------------------------------------------------------------------
+\addto{\captionsngerman}{\renewcommand*{\lstlistingname}{Quellcode}}
+
+%-----------------------------------------------------------------------------
+% Farbe für Links in PDF-Dokumenten definieren
+%-----------------------------------------------------------------------------
+\definecolor{LinkColor}{rgb}{0,0,0}				% Festlegen einer neuen Farbe
+
+\hypersetup{colorlinks=true,					% farbliche Links
+						breaklinks=true,		% Zeilenumbruch erlauben
+						linkcolor=black,		% Farbe für interne Links
+						citecolor=black,		% Farbe für Links zum Literaturverzeichnis
+						filecolor=LinkColor,	% Farbe für externe Dateilinks
+						menucolor=LinkColor,	%
+						urlcolor=LinkColor}		% Farbe für externe Links
+						
+%-----------------------------------------------------------------------------
+% Definition für Quelltextlistings
+%-----------------------------------------------------------------------------
+\definecolor{lbcolor}{gray}{0.95}			% Farbe für den Hintergrund definieren				
+\definecolor{darkblue}{rgb}{0,0,.6}		% Farbe für Schlüsselwörter
+\definecolor{darkred}{rgb}{.6,0,0}		% Farbe für Strings
+\definecolor{darkgreen}{rgb}{0,.6,0}		% Farbe für Kommentare
+
+\lstset{	frame=none,				% keinen Rahmen
+		frameround=ffff,			% wenn ein Rahmen dargestellt werden soll, sind die Ecken spitz
+		captionpos=b,			% Position der Benennung
+		numbers=left,			% Zeilennummern links angeben
+		stepnumber=1,			% in welchem Abstand sollen Zeilennummern angeben werden (1 2 3..)
+		numbersep=5pt,			% Abstand zwischen Nummerierung und Listing
+		numberstyle=\tiny,		% grösse der Nummern
+		breaklines=true,			% Zeilenumbruch zulassen
+		breakautoindent=true,
+		postbreak=\space,
+		tabsize=4,				% Tabulator auf 4 setzen
+		escapechar=\$,
+		basicstyle=\scriptsize\ttfamily,
+		keywordstyle=\color{darkblue}\bfseries\ttfamily,	% Darstellung der Schlüsselwörter
+		stringstyle=\ttfamily\color{darkred},  			% Darstellung der Strings
+		commentstyle=\itshape\color{darkgreen},			% Darstellung der Kommentare
+		showspaces=false,					% leerzeichen nicht anzeigen
+		showstringspaces=false,		% keine Leerzeichen bei Strings anzeigen
+		xleftmargin=.52cm,
+		xrightmargin=.52cm,				
+		backgroundcolor=\color{lbcolor}}	% Hintergrundfarbe des Listings
+
+		
+% for minted
+\setminted[]{xleftmargin=20pt, framesep=1mm, fontsize=\footnotesize, tabsize=4, bgcolor=lbcolor, linenos, breaklines}
+
+% for inlinecode - not related to listings or minted
+\newcommand{\inlinecode}[1]{\colorbox{lbcolor}{\texttt{#1}}}
+				
+%-----------------------------------------------------------------------------
+% Kopf- und Fusszeile bestimmen
+%-----------------------------------------------------------------------------
+\pagestyle{fancy}	
+\fancyhf{}												% alle Felder löschen
+\fancypagestyle{plain}{}
+
+% Kopfzeile rechts bzw. außen
+\fancyhead[R]{\nouppercase{\leftmark}}
+% Linie oben
+\renewcommand{\headrulewidth}{0.5pt}
+% Fußzeile rechts bzw. außen
+\fancyfoot[R]{\thepage}
+
+%-----------------------------------------------------------------------------
+% Definiton der Abkürzungen
+%-----------------------------------------------------------------------------
+
+\DeclareAcronym{iso}{
+  short = ISO ,
+  long  = Internationale Organisation für Normung
+}
+
+%-----------------------------------------------------------------------------
+% Beginn des Dokuments
+%-----------------------------------------------------------------------------
+\begin{document} 						% Beginn des Dokumentes
+
+	\renewcommand{\listingscaption}{Code}
+	\renewcommand{\listoflistingscaption}{Codeverzeichnis}
+	
+	%% Titel
+	\begin{titlepage}
+		\setlength\headsep{-5mm}
+		\begin{figure}[!h]
+			\begin{minipage}{0.8\textwidth}
+				\textbf{Hochschule Wismar} \\
+				University of Applied Sciences \\
+				Technology, Business and Design \\
+				Fakultät für Ingenieurwissenschaften, Bereich EuI \\
+			\rule{\textwidth}{0.5pt}
+			\end{minipage}
+			\begin{minipage}[r]{0.1\textwidth}
+				\begin{flushright}
+					\includegraphics[height=6\baselineskip]{pictures/HS-Wismar_Logo-FIW_V1_RGB.jpg}%
+				\end{flushright}
+			\end{minipage}
+		\end{figure}
+		\vspace*{6cm}
+		\begin{center}
+			\Huge
+			\textbf{\Thesis} \\
+			\vspace{2cm}
+			\large \Titel
+			\begin{table*}[b]
+				\begin{tabular}{rl}
+					Gedruckt am: & \today \\
+					\\
+					Eingereicht am: & \\
+					\\
+					von: & \Verfasser \\
+					& geboren am \Geburtstag \\
+					& in \Geburtsort \\
+					\\
+					Betreuer (Hochschule): & \Betreuer \\
+                    Betreuer (Betrieb): & \ZweitBetreuer 
+
+				\end{tabular}
+			\end{table*}
+		\end{center}
+	\end{titlepage}
+
+	\onehalfspacing 					% 1 1/2-zeilig (package 'setspace')
+	
+	\blankpage	%leeres Blatt zwischen Deckblatt und Inhaltsverzeichnis	
+	%-----------------------------------------------------------------------------
+	% Inhaltsverzeichnis
+	%-----------------------------------------------------------------------------	
+	\pdfbookmark[1]{Inhaltsverzeichnis}{toc}	% Inhaltsverzeichnis zu den Lesezeichen hinzufügen
+	%\singlespacing 						% 1-zeilig
+	\tableofcontents 					% Inhaltverzeichnis einfügen
+	%\onehalfspacing 					% 1 1/2-zeilig (package 'setspace')
+
+	%-----------------------------------------------------------------------------
+	% Hauptteil
+	%-----------------------------------------------------------------------------	
+		
+	\chapter{Abbildungen}
+		\begin{figure}[ht]
+				\begin{center}
+					\includegraphics[scale=0.5]{pictures/HS-Wismar_Logo-FIW_V1_RGB.jpg}
+					\caption{Abbildungsbeschreibung unter dem Bild}						
+					%\label{}
+				\end{center}
+		\end{figure}
+				
+	\chapter{Gleichungen}
+		\begin{equation}
+			U=R \cdot I
+		\end{equation}
+		
+		\begin{equation}
+			R = \dfrac{U}{I}
+		\end{equation}
+		
+		\begin{equation}
+			R = \dfrac{U}{I}
+		\end{equation}
+	
+		\begin{equation}
+			\left( {\frac{a_1}{a_2}} \middle/ {\frac{b_1}{b_2}} \right)
+		\end{equation}
+				
+
+	\chapter{Fußnote und Zitat}
+		command[prenote][postnote]\{key\}
+		
+		\begin{labeling}{xxxxxxxxxxxxx}
+			\item [\textbf{command}] in den folgenden Unterpunkten beschrieben
+			\item [\textbf{prenote}] Text vor der Zitatnennung (meist `vergleiche' oder `siehe')
+			\item [\textbf{postnote}] Text am Ende des Zitats (meist eine Seitenzahl)
+			\item [\textbf{key}] BibLaTex-Key der zu zitierenden Quelle aus der bib-Datei (im gleichen Verzeichnis wie diese Datei)
+		\end{labeling}
+		
+		
+		\section{cite}
+		These are the bare citation commands. They print the citation without any additions such as parentheses. The numeric and alphabetic styles still wrap the label in square brackets since the reference may be ambiguous otherwise.
+		
+		I doubt that there is any useful information here~\cite{wikibook}.
+		
+		\section{parencite}
+		These commands use a format similar to cite but enclose the entire citation in parentheses. The numeric and alphabetic styles use square brackets instead.
+
+		I doubt that there is any useful information here~\parencite{lion2010}.
+		
+		\section{footcite}
+		These command use a format similar to cite but put the entire citation in a footnote and add a period at the end. In the footnote, they automatically capitalize the name prefix of the first name if the useprefix option is enabled, provided that there is a name prefix and the citation style prints any name at all		
+		
+		I doubt that there is any useful information here.\footcite[vgl.][S. 3]{wikibook}
+
+		\section{autocite}
+		following the autocite option in the userpackage description.
+		
+		Some people are too nosy. What can happen to them is described by Laura Lion~\autocite{wombat2016}.
+
+		\section{textcite}
+		They are intended for use in the flow of text, replacing the subject of a sentence. They print the authors or editors followed by a citation label which is enclosed in parentheses. Depending on the citation style, the label may be a number, the year of publication, an abridged version of the title, or something else. The numeric and alphabetic styles use square brackets instead of parentheses. In the verbose styles, the label is provided in a footnote.
+
+		Some people are too nosy. What can happen to them is described by \textcite[9]{wombat2016}.
+		
+		\section{smartcite}
+		Like parencite in a footnote and like footcite in the body.
+		
+		Some people are too nosy. What can happen to them is described by ~\smartcite[9]{lion2010}.
+	
+	\chapter{Table}	
+		\begin{table}[ht]
+			\begin{center}
+				\begin{tabular}{cccc}
+    				\toprule
+    				\textbf{Risikoklasse} & \textbf{Softwareschutz} & \textbf{Softwareprüfung} & \textbf{Softwarekonformität} \\ \midrule
+    				A & niedrig & niedrig & niedrig \\
+   	 				B & mittel & mittel & niedrig 	\\
+   	 				C & mittel & mittel & mittel 	\\
+  	  				D & mittel & mittel & mittel 	\\
+    				E & hoch & hoch & mittel 		\\
+   	 				F & hoch & hoch & hoch 			\\
+  	  				\bottomrule
+  	 				\end{tabular}   				
+    				\caption{Risikoklassen nach WELMEC}
+				\label{tab:risc}
+			\end{center}
+		\end{table}	
+			
+		\begin{table}[ht]
+			\begin{center}
+				\begin{tabular}{cccccccc}
+					\hline					
+					\multicolumn{8}{c}{Speicherblock (20 Byte)} \\
+					\hline			
+					0 .. 3 & 4 .. 7 & 8 .. 11 & 12 .. 13 & 14 & 15 & 16 .. 17 & 18 .. 19\\
+					\hline
+					\multicolumn{1}{|c|}{dummy} &
+					\multicolumn{1}{c|}{dummy} &
+					\multicolumn{1}{c|}{dummy} &
+					\multicolumn{1}{c|}{dummy} &
+					\multicolumn{1}{c|}{dummy} &
+					\multicolumn{1}{c|}{dummy} &
+					\multicolumn{1}{c|}{dummy} &
+					\multicolumn{1}{c|}{dummy}
+					\\
+					\hline
+				\end{tabular}
+				\caption{Speicherorganisation}
+				\label{tab:title} 
+			\end{center}
+		\end{table}
+			
+		\begin{table}[ht]
+			\begin{center}
+				\begin{tabular}{c|c|c|c|c|c|c}
+					\hline					
+					\multicolumn{7}{c}{FRAM 0 (Byte 0..39)} \\
+					\hline			
+					0  & 1 .. 8 & 9 .. 12 & 13 & 14 & 15 & 16 .. 39\\
+					\hline
+					\multicolumn{1}{|c|}{dummy} &
+					\multicolumn{1}{c|}{dummy} &
+					\multicolumn{1}{c|}{dummy} &
+					\multicolumn{1}{c|}{dummy} &
+					\multicolumn{1}{c|}{dummy} &
+					\multicolumn{1}{c|}{dummy} &						
+					\multicolumn{1}{c|}{dummy}
+					\\
+					\hline
+				\end{tabular}
+				\caption{Speicherorganisation in FRAM 0}
+				\label{tab:title} 
+			\end{center}
+		\end{table}			 					
+			
+	\chapter{SI-Einheiten}
+		\SI{24}{\volt}	\\
+		\SI{3.4}{\volt} \dots \SI{3.6}{\volt}	\\
+		\SI{22}{\micro\farad}	\\
+		\SI{2}{\milli\meter} 	\\
+		\SI{180}{\degree} 	\\
+	
+	\chapter{Aufzählung mit Punkten}			
+		\begin{itemize}
+			\item Pullup Widerstände
+			\item FRAM
+			\item SRAM
+			\item Temperatursensor		
+			\item IO-Schaltkreis
+			\item Teil des reset/brownout-Schaltkreis
+		\end{itemize}		
+	
+	\chapter{Aufzählung mit eigener Beschriftung}
+		% xxxxxxxx ist die Anzahl der Platzhalter von links bis zum Beschreibungstext des items. In der Regel eines mehr als das längste Label.
+		\begin{labeling}{xxxxxxxx}
+			\item [\textbf{Niedrig}:] Es sind keine besonderen Schutzmaßnahmen gegen vorsätzliche Veränderungen erforderlich.
+			\item [\textbf{Mittel}:] Die Software ist gegen vorsätzliche Veränderungen geschützt, die mit Hilfe von leicht verfügbaren und einfachen, gängigen Softwaretools (z.B. Texteditoren) vorgenommen werden können.
+			\item [\textbf{Hoch}:] Die Software ist gegen vorsätzliche Veränderungen geschützt, die mit Hilfe von anspruchsvollen Softwaretools (z.B. Debuggern oder Festplatteneditoren, Softwareentwicklungstools usw.) vorgenommen werden können.
+		\end{labeling}
+		
+	\chapter{Aufzählung mit Beschreibungstext}
+		\begin{description}[align=right,labelwidth=3cm]
+			\item [grün] Netzteil
+			\item [orange]Displayanschluss
+		\end{description}
+		
+	\chapter{Aufzählung mit Zahlen}
+		\begin{enumerate}
+			\item Resetpin des Displays von Resetpin des Microcontrollers trennen
+			\item Rework der Lötpads für den verwendeten FRAM-Baustein
+			\item Einführen eines Serial-Reset Pins um SCI-Parameter zurücksetzten zu können
+		\end{enumerate}
+		
+		
+	\chapter{Code-Beispiel}	
+		%unterstützte Sprachen für \textit{lstset\{language= \}}: \\
+		%ABAP, ACSL, Ada, Algol, Ant, Assembler, Awk, bash, Basic, C\#, C++, C, Caml, Clean, Cobol, Comal, csh, Delphi, Eiffel, Elan, erlang, Euphoria, Fortran, GCL,\\	 Gnuplot, Haskell, HTML, IDL, inform, Java, JVMIS, ksh, Lisp, Logo, Lua, make,\\ Mathematica1, Matlab, Mercury, MetaPost, Miranda, Mizar, ML, Modelica,\\	Modula-2, MuPAD, NASTRAN, Oberon-2, Objective C , OCL, Octave, Oz, Pascal, Perl, PHP, PL/I, Plasm, POV, Prolog, Promela, Python, R, Reduce, Rexx, RSL, Ruby, S, SAS, Scilab, sh, SHELXL, Simula4, SQL, tcl, TeX, VBScript, Verilog, VHDL, VRML, XML, XSLT			\\ \\
+		
+		
+		\begin{listing}[ht]
+			\inputminted{c}{listings/helloworld.c}
+			\caption{helloworld Programm}
+			\label{?}
+		\end{listing}		
+		
+		\begin{listing}[ht]
+			\inputminted{python}{listings/helloworld.py}
+			\caption{helloworld Programm}
+			\label{?}
+		\end{listing}
+
+
+	\chapter{Abkürzungen (Acronyme)}
+		Text mit \ac{iso}, der Abkürzung \ac{iso} und mehr Text
+	
+	
+	%-----------------------------------------------------------------------------
+	% Literaturverzeichnis einfügen, 
+	% Nutzung der BibLaTeX-Technologie --> literatur.bib 
+	%-----------------------------------------------------------------------------
+	\setlength\bibitemsep{0.8\baselineskip} %adding space between bibliography entries
+	\printbibliography
+	
+
+	%-----------------------------------------------------------------------------
+	% Verzeichnisse
+	%-----------------------------------------------------------------------------
+	\listoffigures						% Bildverzeichnis einfügen
+	\listoftables						% Tabellenverzeichnis einfügen
+	\listoflistings						% Quellcodeverzeichnis einfügen
+	\printacronyms[sort=true]			% Abkürzungsverzeichnis einfügen	
+
+	%-----------------------------------------------------------------------------
+	% Anhang
+	%-----------------------------------------------------------------------------	
+	\appendix
+	% Auch hier sind Gliederungen aller \chapter, \section
+	
+
+	%-----------------------------------------------------------------------------
+	% Selbstständigkeitserklärung
+	%-----------------------------------------------------------------------------	
+	\chapter*{Selbstständigkeitserklärung}
+	\addcontentsline{toc}{chapter}{Selbstständigkeitserklärung}
+	\rhead{Selbstständigkeitserklärung} % rechts oben in der Kopfzeile Chapter darstellen
+	Hiermit erkläre ich, dass ich die hier vorliegende Arbeit selbstständig,
+	ohne unerlaubte fremde Hilfe und nur unter Verwendung der aufgeführten
+	Hilfsmittel angefertigt habe.
+
+	\begin{tabular}{p{6cm}p{7cm}}
+		\\
+  		\\
+  		\\
+  		\\
+  		Ort, Datum & Unterschrift
+	\end{tabular}
+	
+	\chapter*{Daten-CD}	
+	\addcontentsline{toc}{chapter}{Daten-CD}
+	\rhead{Daten-CD} % rechts oben in der Kopfzeile Chapter darstellen
+	
+\end{document}							% Ende des Dokuments
+%-----------------------------------------------------------------------------
